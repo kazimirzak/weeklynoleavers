@@ -34,21 +34,22 @@ def get_raiderio_weeklies(character):
     return dungeons_
 
 
-chars = get_chars()
-mapping = dict()
-for character in chars:
-    dungeons = get_raiderio_weeklies(character)
-    for dungeon in dungeons:
-        if character not in mapping:
-            mapping[character] = []
-        mapping[character].append(dungeon['mythic_level'])
-mapping = [{'character': character, 'm15+': len([x for x in dungeons if x >= 15]), 'dungeons': dungeons} for character, dungeons in mapping.items()]
-mapping = sorted(mapping, key= lambda x: (x['m15+'], x['character']), reverse=True)
-table = Texttable()
-table.set_cols_align(["l", "c", "c"])
-table.set_cols_valign(['m', 'm', 'm'])
-table.add_row(['Character', '15+s', 'Dungeon Levels'])
-for x in mapping:
-    table.add_row([x['character'], x['m15+'], x['dungeons']])
-with open('output.txt', 'w') as file:
-    file.write(table.draw())
+if __name__ == '__main__':
+    chars = get_chars()
+    mapping = dict()
+    for character in chars:
+        dungeons = get_raiderio_weeklies(character)
+        for dungeon in dungeons:
+            if character not in mapping:
+                mapping[character] = []
+            mapping[character].append(dungeon['mythic_level'])
+    mapping = [{'character': character, 'm15+': len([x for x in dungeons if x >= 15]), 'dungeons': dungeons} for character, dungeons in mapping.items()]
+    mapping = sorted(mapping, key= lambda x: (x['m15+'], x['character']), reverse=True)
+    table = Texttable()
+    table.set_cols_align(["l", "c", "c"])
+    table.set_cols_valign(['m', 'm', 'm'])
+    table.add_row(['Character', '15+s', 'Dungeon Levels'])
+    for x in mapping:
+        table.add_row([x['character'], x['m15+'], x['dungeons']])
+    with open('output.txt', 'w') as file:
+        file.write(table.draw())
